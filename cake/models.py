@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class CakeLevel(models.Model):
@@ -63,3 +65,28 @@ class Cake(models.Model):
 
     def __str__(self):
         return f"Торт ({self.shape.name}, {self.layers.amount})"
+
+
+class Client(models.Model):
+    """Клиент"""
+    customer_name = models.CharField(verbose_name='имя', max_length=20)
+    phone_number = PhoneNumberField(verbose_name='телефон', blank=True)
+    email = models.EmailField(verbose_name='почта')
+
+    def __str__(self):
+        return self.customer_name
+
+
+class Order(models.Model):
+    """Модель для заказа"""
+    cake = models.ForeignKey(Cake, verbose_name='торт', on_delete=models.PROTECT)
+    client = models.ForeignKey(Client, verbose_name='клиент', on_delete=models.CASCADE, related_name='orders')
+    address = models.TextField(verbose_name='адрес')
+    desired_date = models.DateTimeField(verbose_name='дата')
+    desired_time = models.TimeField(verbose_name='время')
+    deliver_comment = models.TextField(max_length=200, verbose_name='комментарии', blank=True, null=True)
+    total_cost = models.FloatField(verbose_name='общая стоимость', default=0.0)
+    created_at = models.DateTimeField(verbose_name='дата создания заказа', default=timezone.now())
+
+    def __str__(self):
+        return f'{self.pk} - {self.client.name}'
