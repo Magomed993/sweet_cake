@@ -47,33 +47,58 @@ Vue.createApp({
     },
 
     RegSubmit(event) {
-      if (!this.RegInput) {
-        return;
-      }
-
       const csrfToken = this.getCSRFToken();
 
-      $.ajax({
-        url: "/login/",
-        type: "POST",
-        contentType: "application/json",
-        headers: { "X-CSRFToken": csrfToken },
-        data: JSON.stringify({ phone: this.RegInput }),
-        success: (data) => {
-          console.log("Успешная авторизация:", data);
-          this.Step = "Finish";
-          this.RegInput = "Регистрация успешна";
-          setTimeout(() => {
-            location.reload();
-          }, 1000);
-        },
-        error: (xhr) => {
-          console.error(
-            "Ошибка авторизации:",
-            xhr.responseJSON?.error || "Ошибка сети"
-          );
-        },
-      });
+      if (this.Step === "Number") {
+        $.ajax({
+          url: "/login/",
+          type: "POST",
+          contentType: "application/json",
+          headers: { "X-CSRFToken": csrfToken },
+          data: JSON.stringify({ phone: this.RegInput }),
+          success: () => {
+            this.Step = "Code";
+            this.EnteredNumber = this.RegInput;
+            this.RegInput = "";
+          },
+          error: (xhr) => {
+            console.error(
+              "Ошибка отправки кода:",
+              xhr.responseJSON?.error || "Ошибка сети"
+            );
+          },
+        });
+      } else if (this.Step === "Code") {
+        $.ajax({
+          url: "/login/",
+          type: "POST",
+          contentType: "application/json",
+          headers: { "X-CSRFToken": csrfToken },
+          data: JSON.stringify({
+            phone: this.EnteredNumber,
+            code: this.RegInput,
+          }),
+          success: (data) => {
+            console.log("Успешная авторизация:", data);
+            this.Step = "Finish";
+            this.RegInput = "Регистрация успешна";
+            setTimeout(() => {
+              location.reload();
+            }, 1000);
+          },
+          error: (xhr) => {
+            console.error(
+              "Ошибка проверки кода:",
+              xhr.responseJSON?.error || "Ошибка сети"
+            );
+          },
+        });
+      }
+    },
+
+    ToRegStep1() {
+      this.Step = "Number";
+      this.RegInput = this.EnteredNumber;
     },
 
     Reset() {
