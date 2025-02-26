@@ -62,4 +62,4 @@ class Cake(models.Model):
     inscription = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return f"Торт ({self.shape.name}, {self.layers.name})"
+        return f"Торт ({self.shape.name}, {self.layers.amount})"
