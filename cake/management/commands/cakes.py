@@ -2,12 +2,12 @@ from django.core.management.base import BaseCommand
 from django.apps import apps
 
 DATA = [
-    {"model": "cake.CakeLayer", "pk": 1, "fields": {"amount": 1, "price": 400}},
-    {"model": "cake.CakeLayer", "pk": 2, "fields": {"amount": 2, "price": 750}},
-    {"model": "cake.CakeLayer", "pk": 3, "fields": {"amount": 3, "price": 1100}},
-    {"model": "cake.CakeShape", "pk": 1, "fields": {"name": "Квадрат", "price": 600}},
-    {"model": "cake.CakeShape", "pk": 2, "fields": {"name": "Круг", "price": 400}},
-    {"model": "cake.CakeShape", "pk": 3, "fields": {"name": "Прямоугольник", "price": 1000}},
+    {"model": "cake.CakeLevel", "pk": 1, "fields": {"amount": 1, "price": 400}},
+    {"model": "cake.CakeLevel", "pk": 2, "fields": {"amount": 2, "price": 750}},
+    {"model": "cake.CakeLevel", "pk": 3, "fields": {"amount": 3, "price": 1100}},
+    {"model": "cake.CakeForm", "pk": 1, "fields": {"name": "Квадрат", "price": 600}},
+    {"model": "cake.CakeForm", "pk": 2, "fields": {"name": "Круг", "price": 400}},
+    {"model": "cake.CakeForm", "pk": 3, "fields": {"name": "Прямоугольник", "price": 1000}},
     {"model": "cake.Topping", "pk": 1, "fields": {"name": "Без", "price": 0}},
     {"model": "cake.Topping", "pk": 2, "fields": {"name": "Белый соус", "price": 200}},
     {"model": "cake.Topping", "pk": 3, "fields": {"name": "Карамельный сироп", "price": 180}},

@@ -1,7 +1,7 @@
 from django.db import models
 
 
-class CakeLayer(models.Model):
+class CakeLevel(models.Model):
     """Модель для хранения количества уровней торта"""
 
     amount = models.PositiveSmallIntegerField(unique=True)
@@ -11,7 +11,7 @@ class CakeLayer(models.Model):
         return f"{self.amount} уровень(я) (+{self.price}р)"
 
 
-class CakeShape(models.Model):
+class CakeForm(models.Model):
     """Модель для хранения формы торта"""
 
     name = models.CharField(max_length=20, unique=True)
@@ -54,8 +54,8 @@ class Decor(models.Model):
 class Cake(models.Model):
     """Основная модель торта"""
 
-    layers = models.ForeignKey(CakeLayer, on_delete=models.DO_NOTHING)
-    shape = models.ForeignKey(CakeShape, on_delete=models.DO_NOTHING)
+    layers = models.ForeignKey(CakeLevel, on_delete=models.DO_NOTHING)
+    shape = models.ForeignKey(CakeForm, on_delete=models.DO_NOTHING)
     topping = models.ForeignKey(Topping, on_delete=models.DO_NOTHING)
     berries = models.ForeignKey(Berry, on_delete=models.SET_NULL, blank=True, null=True)
     decor = models.ForeignKey(Decor, on_delete=models.SET_NULL, blank=True, null=True)
