@@ -1,13 +1,9 @@
 from django.shortcuts import render
 
 
-def index(request):
+def main_page(request):
     return render(request, "index.html")
 
 
-def lk(request):
+def account(request):
     return render(request, "lk.html")
-
-
-def lk_order(request):
-    return render(request, "lk-order.html")
