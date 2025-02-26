@@ -133,11 +133,20 @@
         <span class="cake_grey">Есть вопросы?</span>
         <span class="cake_grey">Воспользуйтесь нашим <a href="https://vk.com/devmanorg" class="text-decoration-none cake_pink">чат-ботом</a>.</span>
         <!-- конец если нет заказов -->
-        <button class="btn text-white rounded-pill align-self-end px-5 mt-3 shadow-none cake__button cake__bg_pink">Выйти</button>
+        <button id="logout" class="btn text-white rounded-pill align-self-end px-5 mt-3 shadow-none cake__button cake__bg_pink">Выйти</button>
       </div>
     </div>
   </div>
+  <form id="logout-form" method="post" action="{% url 'logout' %}" style="display: none;">
+    {% csrf_token %}
+  </form>
 {% endblock %}
 {% block script %}
   <script src="{% static 'lk.js' %}"></script>
+  <script>
+    document.getElementById('logout').addEventListener('click', function (event) {
+      event.preventDefault()
+      document.getElementById('logout-form').submit()
+    })
+  </script>
 {% endblock %}
