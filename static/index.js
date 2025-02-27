@@ -182,6 +182,20 @@ Vue.createApp({
             return this.Costs.Levels[this.Levels] + this.Costs.Forms[this.Form] +
                 this.Costs.Toppings[this.Topping] + this.Costs.Berries[this.Berries] +
                 this.Costs.Decors[this.Decor] + W
+        },
+        TotalCost() {
+            let baseCost = this.Cost;
+        
+            if (this.Dates && this.Time) {
+                let deliveryDateTime = new Date(`${this.Dates}T${this.Time}`);
+                let now = new Date();
+                let timeDiff = Math.max((deliveryDateTime - now) / (1000 * 60 * 60), 0);
+                if (timeDiff < 24) {
+                    baseCost *= 1.2;
+                }
+            }
+        
+            return Math.round(baseCost);
         }
     }
 }).mount('#VueApp')
