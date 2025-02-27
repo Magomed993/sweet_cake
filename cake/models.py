@@ -89,4 +89,4 @@ class Order(models.Model):
     created_at = models.DateTimeField(verbose_name='дата создания заказа', default=timezone.now())
 
     def __str__(self):
-        return f'{self.pk} - {self.client.name}'
+        return f'{self.pk} - {self.client.customer_name}'
