@@ -11,7 +11,7 @@ class CakeLevel(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
-        return f"{self.amount} уровень(я) (+{self.price}р)"
+        return f"{self.amount} уровень(я)"
 
 
 class CakeForm(models.Model):
@@ -21,7 +21,7 @@ class CakeForm(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
-        return f"{self.name} (+{self.price}р)"
+        return self.name
 
 
 class Topping(models.Model):
@@ -31,7 +31,7 @@ class Topping(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
-        return f"{self.name} (+{self.price}р)"
+        return self.name
 
 
 class Berry(models.Model):
@@ -41,7 +41,7 @@ class Berry(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
-        return f"{self.name} (+{self.price}р)"
+        return self.name
 
 
 class Decor(models.Model):
@@ -51,7 +51,7 @@ class Decor(models.Model):
     price = models.DecimalField(max_digits=6, decimal_places=2)
 
     def __str__(self):
-        return f"{self.name} (+{self.price}р)"
+        return self.name
 
 
 class Cake(models.Model):
@@ -65,7 +65,7 @@ class Cake(models.Model):
     inscription = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return f"Торт ({self.shape.name}, {self.layers.amount})"
+        return f"Торт ({self.layers.amount} уровень(я), {self.shape.name})"
 
 
 class Client(models.Model):
