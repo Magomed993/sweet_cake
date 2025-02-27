@@ -136,12 +136,12 @@ Vue.createApp({
                 const DATA = JSON.parse(document.getElementById("DATA").textContent);
                 const requestData = JSON.stringify({
                     cake: {
-                        level: DATA.Levels[this.Levels],
-                        form: DATA.Forms[this.Form],
+                        layers: DATA.Levels[this.Levels],
+                        shape: DATA.Forms[this.Form],
                         topping: DATA.Toppings[this.Topping],
-                        berry: DATA.Berries[this.Berries],
-                        decoration: DATA.Decors[this.Decor],
-                        title: this.Words,
+                        berries: DATA.Berries[this.Berries],
+                        decor: DATA.Decors[this.Decor],
+                        inscription: this.Words,
                     },
                     comment: this.Comments,
                     customer_name: this.Name,
@@ -151,7 +151,7 @@ Vue.createApp({
                     desired_date: this.Dates,
                     desired_time: this.Time,
                     deliver_comment: this.DelivComments,
-                    total_сost: this.Cost
+                    total_cost: this.Cost
                 });
 
                 $.ajax({
