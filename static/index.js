@@ -160,8 +160,8 @@ Vue.createApp({
                     contentType: "application/json",
                     headers: { "X-CSRFToken": csrfToken },
                     data: requestData,
-                    success: () => {
-                        console.log("Успешная создан заказ:", requestData);
+                    success: (response) => {
+                        window.location.href = `/success_order/${response.id}/`
                     },
                     error: (xhr) => {
                       console.error(

@@ -5,14 +5,14 @@ from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
 from django.db import transaction
 from django.http import HttpRequest, HttpResponse, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
 from django.views import View
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from cake.models import Berry, CakeForm, CakeLevel, Decor, Topping
+from cake.models import Berry, CakeForm, CakeLevel, Decor, Order, Topping
 from cake.serializers import OrderSerializer
 
 User = get_user_model()
@@ -52,9 +52,16 @@ def register_order(request: HttpRequest):
     order = serializer.save()
 
     return Response(
-        data=OrderSerializer(order).data,
+        data={"id": order.id, **OrderSerializer(order).data},
         status=status.HTTP_201_CREATED,
     )
+
+
+def success_order(request: HttpRequest, order_id) -> HttpResponse:
+    """Обрабатывает страницу успешного заказа."""
+    order = get_object_or_404(Order, id=order_id)
+
+    return render(request, "success.html", {"order": order})
 
 
 def account(request: HttpRequest, user_id: int) -> HttpResponse:

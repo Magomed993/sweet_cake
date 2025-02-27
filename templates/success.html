@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+  <div class="container mt-header text-center pt-5 mt-5">
+    <div class="card shadow-lg p-4 mx-auto" style="max-width: 500px;">
+      <div class="card-body">
+        <h2 class="font_Gogh fs_40 cake_blue text-center mb-5">🎉 Спасибо за заказ!</h2>
+        <p class="lead">Ваш заказ успешно оформлен.</p>
+
+        <div class="text-start">
+          <p>
+            <strong>Номер заказа:</strong> {{ order.pk }}
+          </p>
+          <p>
+            <strong>Стоимость:</strong> {{ order.total_cost }} руб.
+          </p>
+          <p>
+            <strong>Адрес доставки:</strong> {{ order.address }}
+          </p>
+          <p>
+            <strong>Дата и время:</strong> {{ order.desired_date|date }}, {{ order.desired_time }}
+          </p>
+        </div>
+
+        <a href="{% url 'main_page' %}" class="btn text-white rounded-pill align-self-end px-5 mt-3 shadow-none cake__button cake__bg_pink">На главную</a>
+      </div>
+    </div>
+  </div>
+{% endblock %}
