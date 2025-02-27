@@ -31,11 +31,12 @@ class CakeSerializer(ModelSerializer):
             shape = CakeForm.objects.get(name=validated_data.pop("shape"))
             topping = Topping.objects.get(name=validated_data.pop("topping"))
 
-            berries_name = validated_data.pop("berries", None)
-            berries = Berry.objects.get(name=berries_name) if berries_name else None
-
-            decor_name = validated_data.pop("decor", None)
-            decor = Decor.objects.get(name=decor_name) if decor_name else None
+            berries_name = validated_data.pop("berries")
+            berries = (
+                None if berries_name == "нет" else Berry.objects.get(name=berries_name)
+            )
+            decor_name = validated_data.pop("decor")
+            decor = None if decor_name == "нет" else Decor.objects.get(name=decor_name)
 
         except (
             CakeLevel.DoesNotExist,
