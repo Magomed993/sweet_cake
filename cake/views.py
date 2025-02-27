@@ -12,7 +12,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
-from cake.models import Berry, CakeForm, CakeLevel, Decor, Order, Topping
+from cake.models import Berry, CakeForm, CakeLevel, Client, Decor, Order, Topping
 from cake.serializers import OrderSerializer
 
 User = get_user_model()
@@ -70,9 +70,10 @@ def account(request: HttpRequest, user_id: int) -> HttpResponse:
     if request.user.id != user_id:
         return HttpResponse("Доступ запрещен", status=403)
 
-    # TODO: Брать заказы из БД и передать в context
+    client, _ = Client.objects.get_or_create(user_id=user_id)
+    orders = Order.objects.filter(client=client)
 
-    return render(request, "lk.html")
+    return render(request, "lk.html", {"orders": orders, "client": client})
 
 
 class UserLoginView(LoginView):
