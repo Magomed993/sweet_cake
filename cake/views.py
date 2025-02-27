@@ -8,10 +8,12 @@ from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from cake.models import Berry, CakeForm, CakeLevel, Decor, Topping
+from cake.serializers import OrderSerializer
 
 User = get_user_model()
 
@@ -38,39 +40,26 @@ class IndexView(View):
 
     def get(self, request):
         return render(request, "index.html", self.context)
-    
+
 
 @transaction.atomic
 @api_view(["POST"])
 def register_order(request: HttpRequest):
+    """Обработчик создания заказа"""
 
-    # TODO: добавить serializer = OrderSerializer(data=request.data)
-    print(request.data)
-    # {
-    #     "cake": {
-    #         "level": 2,
-    #         "form": "Квадрат",
-    #         "topping": "Клубничный сироп",
-    #         "berry": "Малина",
-    #         "decoration": "Фундук",
-    #         "title": "С днем рождения",
-    #     },
-    #     "comment": "Хочу мнооого малины",
-    #     "customer_name": "Иван",
-    #     "phone_number": "89999601221",
-    #     "email": "mail@mail.ru",
-    #     "address": "Москва, ул. Пушкина, дом Колотушкина",
-    #     "desired_date": "2025-03-01",
-    #     "desired_time": "10:00",
-    #     "deliver_comment": "Домофон не работает",
-    #     "total_сost": 2800,
-    # }
-    return Response({"message": "success"})
+    serializer = OrderSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
+    order = serializer.save()
+
+    return Response(
+        data=OrderSerializer(order).data,
+        status=status.HTTP_201_CREATED,
+    )
 
 
 def account(request: HttpRequest, user_id: int) -> HttpResponse:
     """Обрабатывает страницу личного кабинета пользователя."""
-    
+
     if request.user.id != user_id:
         return HttpResponse("Доступ запрещен", status=403)
 
