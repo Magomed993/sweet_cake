@@ -90,8 +90,11 @@ class Order(models.Model):
     address = models.TextField(verbose_name="адрес")
     desired_date = models.DateTimeField(verbose_name="дата")
     desired_time = models.TimeField(verbose_name="время")
+    comment = models.TextField(
+        max_length=200, verbose_name="комментарии к торту", blank=True, null=True
+    )
     deliver_comment = models.TextField(
-        max_length=200, verbose_name="комментарии", blank=True, null=True
+        max_length=200, verbose_name="комментарии курьеру", blank=True, null=True
     )
     total_cost = models.FloatField(verbose_name="общая стоимость", default=0.0)
     created_at = models.DateTimeField(
