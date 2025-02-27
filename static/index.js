@@ -151,7 +151,7 @@ Vue.createApp({
                     desired_date: this.Dates,
                     desired_time: this.Time,
                     deliver_comment: this.DelivComments,
-                    total_cost: this.Cost
+                    total_cost: this.TotalCost
                 });
 
                 $.ajax({
