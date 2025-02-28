@@ -98,7 +98,7 @@ class Order(models.Model):
     )
     total_cost = models.FloatField(verbose_name="общая стоимость", default=0.0)
     created_at = models.DateTimeField(
-        verbose_name="дата создания заказа", default=timezone.now()
+        verbose_name="дата создания заказа", default=timezone.now
     )
 
     def __str__(self):
