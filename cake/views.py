@@ -82,6 +82,11 @@ class UserLoginView(LoginView):
     def post(self, request, *args, **kwargs):
         data = json.loads(request.body)
         phone = data.get("phone")
+        code = data.get("code")
+
+        if not code:
+            # TODO: Логика создания и сохранения проверочного кода
+            return JsonResponse({"error": "Проверка кода"})
         if not phone:
             return JsonResponse({"error": "Номер телефона не указан"}, status=400)
 
