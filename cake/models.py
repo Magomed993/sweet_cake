@@ -2,6 +2,10 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from phonenumber_field.modelfields import PhoneNumberField
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from . import inform_tg_bot as tg_bot
+
 
 
 class CakeLevel(models.Model):
@@ -103,3 +107,10 @@ class Order(models.Model):
 
     def __str__(self):
         return f"{self.pk} - {self.client.customer_name}"
+
+
+@receiver(post_save, sender=Order)
+def order_post_save(instance, created, **kwargs):
+    created_message = tg_bot.make_order_details(instance, created)
+    tg_bot.send_note(created_message)
+    return
