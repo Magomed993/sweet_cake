@@ -6,7 +6,8 @@ from .models import Order, Client
 
 class ClientOrderInline(admin.TabularInline):
     model = Order
-    fields = ['id', 'created_at', 'desired_date', 'desired_time', 'total_cost']
+    fields = ['id', 'cake', 'created_at', 'desired_date', 'desired_time', 'total_cost']
+    readonly_fields = ['id']
     extra = 0
 
 
