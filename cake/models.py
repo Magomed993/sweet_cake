@@ -79,6 +79,18 @@ class Client(models.Model):
     def __str__(self):
         return self.customer_name
 
+    def model_to_dict(self):
+        """
+        Преобразует объект Client в словарь.
+        """
+
+        return {
+            "id": self.pk,
+            "customer_name": self.customer_name,
+            "phone_number": str(self.phone_number) if self.phone_number else None,
+            "email": self.email,
+        }
+
 
 class Order(models.Model):
     """Модель для заказа"""
