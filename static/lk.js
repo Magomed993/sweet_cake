@@ -5,11 +5,12 @@ Vue.createApp({
         ErrorMessage: VeeValidate.ErrorMessage,
     },
     data() {
+        const Client = JSON.parse(document.getElementById("client").textContent);        
         return {
             Edit: false,
-            Name: 'Ирина',
-            Phone: '8 909 000-00-00',
-            Email: 'nyam@gmail.com',
+            Name: Client.customer_name,
+            Phone: Client.phone_number,
+            Email: Client.email,
             Schema: {
                 name_format: (value) => {
                     const regex = /^[a-zA-Zа-яА-я]+$/
@@ -48,8 +49,44 @@ Vue.createApp({
         }
     },
     methods: {
+        getCSRFToken() {
+            return document
+              .querySelector('meta[name="csrf-token"]')
+              .getAttribute("content");
+          },
+          
         ApplyChanges() {
             this.Edit = false
+
+            try {
+                const csrfToken = this.getCSRFToken();
+                const requestData = JSON.stringify({
+                    customer_name: this.Name,
+                    phone_number: this.Phone,
+                    email: this.Email,
+                });
+
+                $.ajax({
+                    url: "change_profile/",
+                    type: "POST",
+                    contentType: "application/json",
+                    headers: { "X-CSRFToken": csrfToken },
+                    data: requestData,
+                    success: (response) => {
+                        console.log(response);
+                    },
+                    error: (xhr) => {
+                      console.error(
+                        "Ошибка изменения профиля:",
+                        xhr.responseJSON?.error || "Ошибка сети"
+                      );
+                    },
+                  });
+
+            } catch (error) {
+                console.error('Error profile:', error);
+            }
+            
             this.$refs.HiddenFormSubmit.click()
         }
     }

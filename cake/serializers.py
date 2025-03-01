@@ -1,4 +1,6 @@
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from rest_framework.serializers import (
     CharField,
     EmailField,
@@ -101,3 +103,9 @@ class OrderSerializer(ModelSerializer):
         )
 
         return Order.objects.create(client=client, cake=cake, **validated_data)
+
+
+class ClientUpdateSerializer(ModelSerializer):
+    class Meta:
+        model = Client
+        fields = ["customer_name", "phone_number", "email"]

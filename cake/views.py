@@ -13,7 +13,7 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from cake.models import Berry, CakeForm, CakeLevel, Client, Decor, Order, Topping
-from cake.serializers import OrderSerializer
+from cake.serializers import ClientUpdateSerializer, OrderSerializer
 
 User = get_user_model()
 
@@ -57,6 +57,22 @@ def register_order(request: HttpRequest):
     )
 
 
+@transaction.atomic
+@api_view(["POST"])
+def change_profile(request: HttpRequest, user_id: int):
+    """Обработчик изменения профиля"""
+
+    if request.user.id != user_id:
+        return HttpResponse("Доступ запрещен", status=status.HTTP_403_FORBIDDEN)
+
+    client = get_object_or_404(Client, id=user_id)
+    serializer = ClientUpdateSerializer(client, data=request.data, partial=True)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+
+    return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
 def success_order(request: HttpRequest, order_id) -> HttpResponse:
     """Обрабатывает страницу успешного заказа."""
     order = get_object_or_404(Order, id=order_id)
@@ -68,12 +84,14 @@ def account(request: HttpRequest, user_id: int) -> HttpResponse:
     """Обрабатывает страницу личного кабинета пользователя."""
 
     if request.user.id != user_id:
-        return HttpResponse("Доступ запрещен", status=403)
+        return HttpResponse("Доступ запрещен", status=status.HTTP_403_FORBIDDEN)
 
     client, _ = Client.objects.get_or_create(user_id=user_id)
     orders = Order.objects.filter(client=client)
 
-    return render(request, "lk.html", {"orders": orders, "client": client})
+    context = {"orders": orders, "client": client.model_to_dict()}
+
+    return render(request, "lk.html", context)
 
 
 class UserLoginView(LoginView):
