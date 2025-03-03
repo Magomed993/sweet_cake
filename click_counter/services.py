@@ -3,6 +3,11 @@ from urllib.parse import urlparse
 from environs import Env
 
 
+env = Env()
+env.read_env()
+VK_TOKEN = env.str("VK_SERVICE_TOKEN")
+
+
 def get_netloc(short_url: str) -> str:
     """Определяет нетлок короткой ссылки"""
     if not short_url.startswith(("http://", "https://")):
@@ -20,12 +25,10 @@ def notify_missing_method(short_url: str) -> int:
 
 def get_vk_clicks_count(short_url: str) -> int:
     """Получает количество переходов по короткой ссылке через VK API."""
-    env = Env()
-    env.read_env()
-    vk_token = env.str("VK_SERVICE_TOKEN")
+    
     link_key = urlparse(short_url).path[1:]
     parameters = {
-        "access_token": vk_token,
+        "access_token": VK_TOKEN,
         "v": "5.199",
         "key": link_key,
         "source": "vk_cc",
@@ -48,6 +51,25 @@ def get_vk_clicks_count(short_url: str) -> int:
     except requests.RequestException as e:
         print(f"Ошибка при запросе к VK API: {e}")
     return vk_clicks_count
+
+
+def shorten_link_vk(url):
+    '''Генерирует короткую ссылку с помощью VK API'''
+    parameters = {
+        'access_token': VK_TOKEN,
+        'v': '5.199',
+        'url': url,
+        'private': 0,
+    }
+    response = requests.post(
+        'https://api.vk.ru/method/utils.getShortLink', data=parameters, timeout=20)
+    response.raise_for_status()
+    response_data = response.json()
+    if 'response' in response_data:
+        return response_data['response']['short_url']
+    elif 'error' in response_data:
+        raise Exception(f'Ошибка API {response_data["error"]["error_code"]}')
+    return
 
 
 def count_clicks(short_url: str) -> int:

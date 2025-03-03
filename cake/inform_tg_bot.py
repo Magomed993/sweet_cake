@@ -22,7 +22,7 @@ def make_order_details(instance={}, created: bool = True) -> str:
     Заказчик: {instance.client.customer_name}""")
 
     if instance.client.phone_number:
-        order_details += f"Номер телефона: {instance.client.phone_number}"
+        order_details += f"\nНомер телефона: {instance.client.phone_number}"
         
     des_date = instance.desired_date.strftime("%d-%m-%Y")
     des_time = instance.desired_time.strftime("%H:%M")

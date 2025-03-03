@@ -1,6 +1,5 @@
 from django.contrib import admin
 from click_counter.models import ShortLink
-from click_counter.services import count_clicks
 
 # Register your models here.
 
@@ -29,6 +28,7 @@ update_clicks_once.short_description = "Обновить данные"
 
 @admin.register(ShortLink)
 class ShortLinkAdmin(admin.ModelAdmin):
-    list_display = ("short_url", "ad_platform", "clicks_count")
-    search_fields = ("short_url", "ad_platform")
+    list_display = ["original_url", "shortener", "short_url", "clicks_count", "notes"]
+    search_fields = ("original_url", "shortener", "short_url")
     actions = [reset_values, update_clicks_once]
+    readonly_fields = ["clicks_count"]
